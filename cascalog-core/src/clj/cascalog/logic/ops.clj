@@ -161,7 +161,7 @@
   :init-var #'impl/one
   :combine-var #'+)
 
-(defaggregateop !distinct-count-agg
+(defaggregateop distinct-count-agg!
   ([] [nil 0])
   ([[prev cnt] & tuple]
      [tuple (impl/distinct-count-impl prev cnt tuple)])
@@ -171,13 +171,13 @@
 
 (def min (each impl/min-parallel))
 
-(def !min (each impl/comparable-min-parallel))
+(def min! (each impl/comparable-min-parallel))
 
 (def max (each impl/max-parallel))
 
-(def !max (each impl/comparable-max-parallel))
+(def max! (each impl/comparable-max-parallel))
 
-(def !count (each impl/!count-parallel))
+(def count! (each impl/!count-parallel))
 
 (def null-safe-sum (impl/nil-safe-combiner +))
 
@@ -190,26 +190,26 @@
   :init-var #'identity
   :combine-var #'null-safe-sum)
 
-(def !sum (each !sum-parallel))
+(def sum! (each !sum-parallel))
 
-(def !avg
+(def avg!
   (<- [!v :> !avg]
       (!count !v :> !c)
       (!sum !v :> !s)
       (nil-save-div !s !c :> !avg)))
 
-(def !distinct-count
+(def distinct-count!
   "Predicate operation that produces a count of all distinct
   values of the supplied input variable. For example:
 
   (let [src [[1] [2] [2]]]
   (<- [?count]
       (src ?x)
-      (!distinct-count ?x :> ?count)))
+      (distinct-count! ?x :> ?count)))
   ;;=> ([2])"
   (<- [:<< !invars :> !c]
       (:sort :<< !invars)
-      (!distinct-count-agg :<< !invars :> !c)))
+      (distinct-count-agg! :<< !invars :> !c)))
 
 (defn limit-init [sort-tuple & tuple]
   ;; this is b/c CombinerBase does coerceToSeq on everything and
