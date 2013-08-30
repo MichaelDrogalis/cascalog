@@ -177,7 +177,7 @@
 
 (def max! (each impl/comparable-max-parallel))
 
-(def count! (each impl/!count-parallel))
+(def count! (each impl/count-parallel!))
 
 (def null-safe-sum (impl/nil-safe-combiner +))
 
