@@ -151,20 +151,21 @@
                     [src ?x]
                     (cascalog.logic.ops/avg! ?x :> ?avg)))))
 
-(deftest count!-test
-  (facts "Null safe avg aggregate"
-         (let [src [[0] [1] [2] [nil]]]
+(deftest distinct-count!-test
+  (facts "Null safe distinct count aggregate"
+         (let [src [[0] [1] [2] [2] [nil]]]
            (fact?<- [[3]]
                     [?count]
                     (src ?x)
-                    (cascalog.logic.ops/count! ?x :> ?count)))
+                    (cascalog.logic.ops/distinct-count! ?x :> ?count)))
          (let [src [[-99] [nil] [nil]]]
            (fact?<- [[1]]
                     [?count]
                     [src ?x]
-                    (cascalog.logic.ops/count! ?x :> ?count)))
+                    (cascalog.logic.ops/distinct-count! ?x :> ?count)))
          (let [src [[nil]]]
            (fact?<- []
                     [?count]
                     [src ?x]
-                    (cascalog.logic.ops/count! ?x :> ?count)))))
+                    (cascalog.logic.ops/distinct-count! ?x :> ?count)))))
+
